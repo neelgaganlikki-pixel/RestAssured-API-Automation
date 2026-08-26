@@ -40,15 +40,56 @@ pipeline {
         }
 
         success {
-            echo '======================================'
-            echo 'API AUTOMATION TESTS PASSED'
-            echo '======================================'
+
+            emailext(
+                to: 'neelgaganat97@gmail.com',
+                subject: "REST Assured API Tests - BUILD #${BUILD_NUMBER} - SUCCESS",
+                body: """
+Hello Neel,
+
+Your REST Assured API automation build has completed successfully.
+
+Project: ${JOB_NAME}
+Build Number: ${BUILD_NUMBER}
+Status: SUCCESS
+
+The API tests were executed successfully through Jenkins.
+
+Jenkins Build:
+${BUILD_URL}
+
+The execution log has been archived with this build.
+
+Regards,
+Jenkins
+"""
+            )
         }
 
         failure {
-            echo '======================================'
-            echo 'API AUTOMATION TESTS FAILED'
-            echo '======================================'
+
+            emailext(
+                to: 'neelgaganat97@gmail.com',
+                subject: "REST Assured API Tests - BUILD #${BUILD_NUMBER} - FAILED",
+                body: """
+Hello Neel,
+
+Your REST Assured API automation build has FAILED.
+
+Project: ${JOB_NAME}
+Build Number: ${BUILD_NUMBER}
+Status: FAILED
+
+Please check the Jenkins console output for the failure details.
+
+Jenkins Build:
+${BUILD_URL}
+
+Regards,
+Jenkins
+""",
+                attachLog: true
+            )
         }
     }
 }
