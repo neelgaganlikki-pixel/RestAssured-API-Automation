@@ -1,65 +1,54 @@
 pipeline {
+
     agent any
 
-    tools {
-        maven 'Maven 3'
-        jdk 'JDK 21'
-    }
-
-    environment {
-        MAVEN_OPTS = '-Xmx1024m'
-    }
-
     stages {
+
         stage('Checkout') {
             steps {
                 checkout scm
             }
         }
 
-        stage('Clean & Compile') {
+        stage('Verify Environment') {
             steps {
-                bat 'mvn clean compile test-compile'
+                bat 'java -version'
+                bat 'mvn -version'
             }
         }
 
-        stage('Run Tests') {
+        stage('Run API Tests') {
             steps {
-                bat 'mvn test'
-            }
-        }
-
-        stage('Publish Reports') {
-            steps {
-                script {
-                    // Publish TestNG results
-                    step([
-                        $class: 'Publisher',
-                        reportFilenamePattern: '**/target/surefire-reports/testng-results.xml'
-                    ])
-                }
+                bat 'mvn clean test'
             }
         }
     }
 
     post {
+
         always {
-            // Archive test logs
-            archiveArtifacts artifacts: 'logs/*.txt', allowEmptyArchive: true
 
-            // Publish JUnit-style TestNG reports
-            junit testResults: 'target/surefire-reports/junitreports/*.xml', allowEmptyResults: true
+            junit(
+                testResults: '**/target/surefire-reports/*.xml',
+                allowEmptyResults: true
+            )
 
-            // Clean workspace
-            cleanWs()
+            archiveArtifacts(
+                artifacts: 'logs/*.txt',
+                allowEmptyArchive: true
+            )
         }
 
         success {
-            echo '✅ All API tests passed successfully!'
+            echo '======================================'
+            echo 'API AUTOMATION TESTS PASSED'
+            echo '======================================'
         }
 
         failure {
-            echo '❌ Some tests failed. Check the reports for details.'
+            echo '======================================'
+            echo 'API AUTOMATION TESTS FAILED'
+            echo '======================================'
         }
     }
 }
