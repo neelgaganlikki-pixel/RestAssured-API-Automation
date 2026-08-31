@@ -1,65 +1,95 @@
 pipeline {
+
     agent any
 
-    tools {
-        maven 'Maven 3'
-        jdk 'JDK 21'
-    }
-
-    environment {
-        MAVEN_OPTS = '-Xmx1024m'
-    }
-
     stages {
+
         stage('Checkout') {
             steps {
                 checkout scm
             }
         }
 
-        stage('Clean & Compile') {
+        stage('Verify Environment') {
             steps {
-                bat 'mvn clean compile test-compile'
+                bat 'java -version'
+                bat 'mvn -version'
             }
         }
 
-        stage('Run Tests') {
+        stage('Run API Tests') {
             steps {
-                bat 'mvn test'
-            }
-        }
-
-        stage('Publish Reports') {
-            steps {
-                script {
-                    // Publish TestNG results
-                    step([
-                        $class: 'Publisher',
-                        reportFilenamePattern: '**/target/surefire-reports/testng-results.xml'
-                    ])
-                }
+                bat 'mvn clean test'
             }
         }
     }
 
     post {
+
         always {
-            // Archive test logs
-            archiveArtifacts artifacts: 'logs/*.txt', allowEmptyArchive: true
 
-            // Publish JUnit-style TestNG reports
-            junit testResults: 'target/surefire-reports/junitreports/*.xml', allowEmptyResults: true
+            junit(
+                testResults: '**/target/surefire-reports/*.xml',
+                allowEmptyResults: true
+            )
 
-            // Clean workspace
-            cleanWs()
+            archiveArtifacts(
+                artifacts: 'logs/*.txt',
+                allowEmptyArchive: true
+            )
         }
 
         success {
-            echo '✅ All API tests passed successfully!'
+
+            emailext(
+                to: 'neelgaganat97@gmail.com',
+                subject: "REST Assured API Tests - BUILD #${BUILD_NUMBER} - SUCCESS",
+                body: """
+Hello Neel,
+
+Your REST Assured API automation build has completed successfully.
+
+Project: ${JOB_NAME}
+Build Number: ${BUILD_NUMBER}
+Status: SUCCESS
+
+The API tests were executed successfully through Jenkins.
+
+Jenkins Build:
+${BUILD_URL}
+
+The execution log has been archived with this build.
+
+Regards,
+Jenkins
+"""
+            )
         }
 
         failure {
-            echo '❌ Some tests failed. Check the reports for details.'
+
+            emailext(
+                to: 'neelgaganat97@gmail.com',
+                subject: "REST Assured API Tests - BUILD #${BUILD_NUMBER} - FAILED",
+                body: """
+Hello Neel,
+
+Your REST Assured API automation build has FAILED.
+
+Project: ${JOB_NAME}
+Build Number: ${BUILD_NUMBER}
+Status: FAILED
+
+Please check the Jenkins console output for the failure details.
+
+Jenkins Build:
+${BUILD_URL}
+
+Regards,
+Jenkins
+""",
+                attachLog: true
+            )
         }
     }
 }
