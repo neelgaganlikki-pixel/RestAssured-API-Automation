@@ -45,12 +45,19 @@ public class BasicApiTest {
                 .baseUri("https://jsonplaceholder.typicode.com")
 
                 .when()
-                .get("/users/1")
+                .get("/users/1");
 
-                .then()
-                .statusCode(200)
-                .extract()
-                .response();
+        System.out.println();
+        System.out.println("=== Test 1: GET User by ID ===");
+        System.out.println("Status Code: " + response.getStatusCode());
+        System.out.println("Response Body:");
+        System.out.println(response.getBody().asString());
+
+        assertEquals(
+                response.getStatusCode(),
+                200,
+                "GET user by ID should return status 200"
+        );
 
         int id = response.jsonPath().getInt("id");
 
@@ -58,36 +65,12 @@ public class BasicApiTest {
 
         String email = response.jsonPath().getString("email");
 
-        System.out.println("=== Test 1: GET User by ID ===");
+        System.out.println("User ID: " + id);
+        System.out.println("User Name: " + name);
+        System.out.println("User Email: " + email);
 
-        System.out.println(
-                "Status Code: "
-                        + response.getStatusCode()
-        );
-
-        System.out.println(
-                "User ID: "
-                        + id
-        );
-
-        System.out.println(
-                "User Name: "
-                        + name
-        );
-
-        System.out.println(
-                "User Email: "
-                        + email
-        );
-
-        System.out.println(
-                "Response Body:\n"
-                        + response.getBody().asString()
-        );
-
-        System.out.println(
-                "================================\n"
-        );
+        System.out.println("================================");
+        System.out.println();
 
         assertEquals(
                 id,
@@ -118,12 +101,19 @@ public class BasicApiTest {
                 .baseUri("https://jsonplaceholder.typicode.com")
 
                 .when()
-                .get("/users")
+                .get("/users");
 
-                .then()
-                .statusCode(200)
-                .extract()
-                .response();
+        System.out.println();
+        System.out.println("=== Test 2: GET All Users ===");
+        System.out.println("Status Code: " + response.getStatusCode());
+        System.out.println("Response Body:");
+        System.out.println(response.getBody().asString());
+
+        assertEquals(
+                response.getStatusCode(),
+                200,
+                "GET all users should return status 200"
+        );
 
         int userCount =
                 response.jsonPath()
@@ -131,22 +121,12 @@ public class BasicApiTest {
                         .size();
 
         System.out.println(
-                "=== Test 2: GET All Users ==="
-        );
-
-        System.out.println(
-                "Status Code: "
-                        + response.getStatusCode()
-        );
-
-        System.out.println(
                 "Number of users returned: "
                         + userCount
         );
 
-        System.out.println(
-                "================================\n"
-        );
+        System.out.println("================================");
+        System.out.println();
 
         assertTrue(
                 userCount > 0,
@@ -161,18 +141,28 @@ public class BasicApiTest {
     @Test
     public void testGetUserWithPathParam() {
 
+        int requestedId = 2;
+
         Response response = RestAssured
                 .given()
                 .baseUri("https://jsonplaceholder.typicode.com")
-                .pathParam("id", 2)
+                .pathParam("id", requestedId)
 
                 .when()
-                .get("/users/{id}")
+                .get("/users/{id}");
 
-                .then()
-                .statusCode(200)
-                .extract()
-                .response();
+        System.out.println();
+        System.out.println("=== Test 3: GET User with Path Param ===");
+        System.out.println("Requested ID: " + requestedId);
+        System.out.println("Status Code: " + response.getStatusCode());
+        System.out.println("Response Body:");
+        System.out.println(response.getBody().asString());
+
+        assertEquals(
+                response.getStatusCode(),
+                200,
+                "GET user with path parameter should return status 200"
+        );
 
         int returnedId =
                 response.jsonPath().getInt("id");
@@ -180,32 +170,16 @@ public class BasicApiTest {
         String name =
                 response.jsonPath().getString("name");
 
-        System.out.println(
-                "=== Test 3: GET User with Path Param ==="
-        );
+        System.out.println("Returned ID: " + returnedId);
+        System.out.println("User Name: " + name);
 
-        System.out.println(
-                "Requested ID: 2"
-        );
-
-        System.out.println(
-                "Returned ID: "
-                        + returnedId
-        );
-
-        System.out.println(
-                "User Name: "
-                        + name
-        );
-
-        System.out.println(
-                "================================\n"
-        );
+        System.out.println("================================");
+        System.out.println();
 
         assertEquals(
                 returnedId,
-                2,
-                "Returned user ID should be 2"
+                requestedId,
+                "Returned user ID should match requested ID"
         );
     }
 
@@ -216,18 +190,28 @@ public class BasicApiTest {
     @Test
     public void testGetUsersWithQueryParam() {
 
+        String username = "Bret";
+
         Response response = RestAssured
                 .given()
                 .baseUri("https://jsonplaceholder.typicode.com")
-                .queryParam("username", "Bret")
+                .queryParam("username", username)
 
                 .when()
-                .get("/users")
+                .get("/users");
 
-                .then()
-                .statusCode(200)
-                .extract()
-                .response();
+        System.out.println();
+        System.out.println("=== Test 4: GET Users with Query Param ===");
+        System.out.println("Query: username=" + username);
+        System.out.println("Status Code: " + response.getStatusCode());
+        System.out.println("Response Body:");
+        System.out.println(response.getBody().asString());
+
+        assertEquals(
+                response.getStatusCode(),
+                200,
+                "GET users with query parameter should return status 200"
+        );
 
         int resultCount =
                 response.jsonPath()
@@ -235,26 +219,12 @@ public class BasicApiTest {
                         .size();
 
         System.out.println(
-                "=== Test 4: GET Users with Query Param ==="
-        );
-
-        System.out.println(
-                "Query: username=Bret"
-        );
-
-        System.out.println(
                 "Results found: "
                         + resultCount
         );
 
-        System.out.println(
-                "First result:\n"
-                        + response.getBody().asString()
-        );
-
-        System.out.println(
-                "================================\n"
-        );
+        System.out.println("================================");
+        System.out.println();
 
         assertTrue(
                 resultCount > 0,
@@ -276,6 +246,16 @@ public class BasicApiTest {
                 "  \"email\": \"neel@example.com\"\n" +
                 "}";
 
+        System.out.println();
+        System.out.println("=== Test 5: POST New User ===");
+        System.out.println("Request Body:");
+        System.out.println(requestBody);
+
+        /*
+         * Capture the response BEFORE performing the assertion.
+         * This allows us to see the actual status code and response
+         * body in Jenkins when the API returns an unexpected status.
+         */
         Response response = RestAssured
                 .given()
                 .baseUri("https://jsonplaceholder.typicode.com")
@@ -283,39 +263,30 @@ public class BasicApiTest {
                 .body(requestBody)
 
                 .when()
-                .post("/users")
+                .post("/users");
 
-                .then()
-                .statusCode(201)
-                .extract()
-                .response();
+        System.out.println("Status Code: " + response.getStatusCode());
+        System.out.println("Response Body:");
+        System.out.println(response.getBody().asString());
+
+        /*
+         * Expected response from JSONPlaceholder:
+         * HTTP 201 Created
+         */
+        assertEquals(
+                response.getStatusCode(),
+                201,
+                "POST new user should return status 201"
+        );
 
         String returnedName =
                 response.jsonPath()
                         .getString("name");
 
-        System.out.println(
-                "=== Test 5: POST New User ==="
-        );
+        System.out.println("Returned Name: " + returnedName);
 
-        System.out.println(
-                "Status Code: "
-                        + response.getStatusCode()
-        );
-
-        System.out.println(
-                "Returned Name: "
-                        + returnedName
-        );
-
-        System.out.println(
-                "Response Body:\n"
-                        + response.getBody().asString()
-        );
-
-        System.out.println(
-                "================================\n"
-        );
+        System.out.println("================================");
+        System.out.println();
 
         assertEquals(
                 returnedName,
@@ -339,6 +310,15 @@ public class BasicApiTest {
                 "  \"email\": \"updated@example.com\"\n" +
                 "}";
 
+        System.out.println();
+        System.out.println("=== Test 6: PUT Update User ===");
+        System.out.println("Request Body:");
+        System.out.println(requestBody);
+
+        /*
+         * Capture the response BEFORE assertion so Jenkins shows
+         * the actual API response when something goes wrong.
+         */
         Response response = RestAssured
                 .given()
                 .baseUri("https://jsonplaceholder.typicode.com")
@@ -346,39 +326,30 @@ public class BasicApiTest {
                 .body(requestBody)
 
                 .when()
-                .put("/users/1")
+                .put("/users/1");
 
-                .then()
-                .statusCode(200)
-                .extract()
-                .response();
+        System.out.println("Status Code: " + response.getStatusCode());
+        System.out.println("Response Body:");
+        System.out.println(response.getBody().asString());
+
+        /*
+         * Expected response from JSONPlaceholder:
+         * HTTP 200 OK
+         */
+        assertEquals(
+                response.getStatusCode(),
+                200,
+                "PUT update user should return status 200"
+        );
 
         String updatedName =
                 response.jsonPath()
                         .getString("name");
 
-        System.out.println(
-                "=== Test 6: PUT Update User ==="
-        );
+        System.out.println("Updated Name: " + updatedName);
 
-        System.out.println(
-                "Status Code: "
-                        + response.getStatusCode()
-        );
-
-        System.out.println(
-                "Updated Name: "
-                        + updatedName
-        );
-
-        System.out.println(
-                "Response Body:\n"
-                        + response.getBody().asString()
-        );
-
-        System.out.println(
-                "================================\n"
-        );
+        System.out.println("================================");
+        System.out.println();
 
         assertEquals(
                 updatedName,
@@ -399,35 +370,22 @@ public class BasicApiTest {
                 .baseUri("https://jsonplaceholder.typicode.com")
 
                 .when()
-                .delete("/users/1")
+                .delete("/users/1");
 
-                .then()
-                .statusCode(200)
-                .extract()
-                .response();
-
-        System.out.println(
-                "=== Test 7: DELETE User ==="
-        );
-
-        System.out.println(
-                "Status Code: "
-                        + response.getStatusCode()
-        );
-
-        System.out.println(
-                "Response Body:\n"
-                        + response.getBody().asString()
-        );
-
-        System.out.println(
-                "================================\n"
-        );
+        System.out.println();
+        System.out.println("=== Test 7: DELETE User ===");
+        System.out.println("Status Code: " + response.getStatusCode());
+        System.out.println("Response Body:");
+        System.out.println(response.getBody().asString());
 
         assertEquals(
                 response.getStatusCode(),
                 200,
-                "Delete should return status 200"
+                "DELETE user should return status 200"
         );
+
+        System.out.println("================================");
+        System.out.println();
     }
 }
+
