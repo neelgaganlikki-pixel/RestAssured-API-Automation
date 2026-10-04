@@ -34,7 +34,7 @@ pipeline {
             )
 
             archiveArtifacts(
-                artifacts: 'logs/*.txt',
+                artifacts: 'logs/*.txt, reports/*.*',
                 allowEmptyArchive: true
             )
         }

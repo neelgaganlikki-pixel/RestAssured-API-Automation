@@ -23,10 +23,16 @@ public class BasicApiTest {
         testExecutionLogger = new TestExecutionLogger();
 
         testExecutionLogger.startLogging();
+
+        // Initialize Self-Healing Engine
+        com.neel.selfhealing.engine.SelfHealingEngine.initialize();
     }
 
     @AfterSuite(alwaysRun = true)
     public void stopTestLogging() {
+
+        // Conclude Self-Healing Engine and flush reports
+        com.neel.selfhealing.engine.SelfHealingEngine.shutdown();
 
         if (testExecutionLogger != null) {
             testExecutionLogger.stopLogging();

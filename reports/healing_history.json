@@ -1,0 +1,92 @@
+{
+  "API.userName" : {
+    "original" : "userName",
+    "healed" : "username",
+    "confidence" : 0.9202222222222222,
+    "success_count" : 5,
+    "target_type" : "API",
+    "test_name" : "test2_FieldRenamed",
+    "last_healed_at" : "2026-10-04T13:55:13.332437700Z"
+  },
+  "DATABASE.customers" : {
+    "original" : "customers",
+    "healed" : "CUSTOMER",
+    "confidence" : 0.98,
+    "success_count" : 8,
+    "target_type" : "DATABASE",
+    "test_name" : "test9_QueryHealing",
+    "last_healed_at" : "2026-10-04T13:55:14.010908700Z"
+  },
+  "DATABASE.customer.name" : {
+    "original" : "customer.name",
+    "healed" : "CUSTOMERNAME",
+    "confidence" : 1.0,
+    "success_count" : 3,
+    "target_type" : "DATABASE",
+    "test_name" : "test5_MultiplePossibleColumns",
+    "last_healed_at" : "2026-10-04T13:55:13.970595400Z"
+  },
+  "API.customerId" : {
+    "original" : "customerId",
+    "healed" : "customer_id",
+    "confidence" : 0.9700000000000001,
+    "success_count" : 5,
+    "target_type" : "API",
+    "test_name" : "test7_HighConfidenceMapping",
+    "last_healed_at" : "2026-10-04T13:55:13.498282300Z"
+  },
+  "API.data.user.name" : {
+    "original" : "data.user.name",
+    "healed" : "result.user.name",
+    "confidence" : 0.9700000000000001,
+    "success_count" : 5,
+    "target_type" : "API",
+    "test_name" : "test4_JsonPathChanged",
+    "last_healed_at" : "2026-10-04T13:55:13.423649200Z"
+  },
+  "API.name" : {
+    "original" : "name",
+    "healed" : "customer_name",
+    "confidence" : 1.0,
+    "success_count" : 4,
+    "target_type" : "API",
+    "test_name" : "test6_MultiplePossibleMappings",
+    "last_healed_at" : "2026-10-04T13:55:13.453277500Z"
+  },
+  "API.user.address.zip" : {
+    "original" : "user.address.zip",
+    "healed" : "user.address.zipcode",
+    "confidence" : 1.0,
+    "success_count" : 4,
+    "target_type" : "API",
+    "test_name" : "test3_NestedFieldChanged",
+    "last_healed_at" : "2026-10-04T13:55:13.389921100Z"
+  },
+  "DATABASE.CUSTOMER.customer_name" : {
+    "original" : "CUSTOMER.customer_name",
+    "healed" : "CUSTOMERNAME",
+    "confidence" : 0.9550000000000001,
+    "success_count" : 8,
+    "target_type" : "DATABASE",
+    "test_name" : "test9_QueryHealing",
+    "last_healed_at" : "2026-10-04T13:55:14.039943400Z"
+  },
+  "DATABASE.orders.order_date" : {
+    "original" : "orders.order_date",
+    "healed" : "ORDERDATE",
+    "confidence" : 1.0,
+    "success_count" : 4,
+    "target_type" : "DATABASE",
+    "test_name" : "test6_HighConfidenceMapping",
+    "last_healed_at" : "2026-10-04T13:55:13.973323800Z"
+  },
+  "DATABASE.customer.customer_name" : {
+    "original" : "customer.customer_name",
+    "healed" : "CUSTOMERNAME",
+    "confidence" : 1.0,
+    "success_count" : 4,
+    "target_type" : "DATABASE",
+    "test_name" : "test2_ColumnRenamed",
+    "last_healed_at" : "2026-10-04T13:55:13.960058400Z"
+  }
+}
